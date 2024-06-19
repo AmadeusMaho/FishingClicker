@@ -7,6 +7,8 @@
 -- la columna 1 y el 0.2 es la velocidad a la que cambia la imagen
 anim8 = require 'libraries.anim8'
 
+--tamaño pantalla
+ancho,alto = love.graphics.getDimensions()
 
 --musica
 music = {}
@@ -19,17 +21,17 @@ sonidos.click = love.audio.newSource("audio/sfx.mp3","static")
 
 --backgrounds
 bg = {}
-bg.level1 = love.graphics.newImage("resources/bg.jpg")
+bg.level1 = {}
+bg.level1.sprite = love.graphics.newImage("resources/bg.jpg")
+
 
 --pez
 peces = {}
 peces.lvl1Spritesheet = love.graphics.newImage('sprites/pez1.png')
-peces.lvl1Grid = anim8.newGrid(16,16,peces.lvl1Spritesheet:getWidth(),peces.lvl1Spritesheet:getHeight())
+peces.lvl1Grid = anim8.newGrid(32,32,peces.lvl1Spritesheet:getWidth(),peces.lvl1Spritesheet:getHeight())
 animaciones = {}
-animaciones.pezlvl1 = anim8.newAnimation(peces.lvl1Grid('1-4',1),0.2)
+animaciones.pezlvl1 = anim8.newAnimation(peces.lvl1Grid('1-3',1),0.2)
 
---tamaño pantalla
-ancho,alto = love.graphics.getDimensions()
 
 function love.load()
     --quita lo borroso
@@ -47,12 +49,13 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.setNewFont(30)
     mouse = {}
     mouse.X,mouse.Y = love.mouse.getPosition()
+    love.graphics.setNewFont(30)
+    love.graphics.print(peces.lvl1Spritesheet:getWidth().." "..peces.lvl1Spritesheet:getHeight())
     love.graphics.print(mouse.X..mouse.Y)
-    love.graphics.draw(bg.level1,0,0,0,nil)
-    animaciones.pezlvl1:draw(peces.lvl1Spritesheet,ancho/2,alto/2,nil,6,6)
+    love.graphics.draw(bg.level1.sprite,0,0,0,nil)
+    animaciones.pezlvl1:draw(peces.lvl1Spritesheet,ancho/2-100,alto/2-100,nil,6,6)
 end
 
 function love.mousepressed()

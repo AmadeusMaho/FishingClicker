@@ -125,9 +125,6 @@ function love.mousepressed()
         love.audio.play(sonidos.sell) 
         monedaCant = monedaCant + (clickPeces.cant * 2)
         clickPeces.cant = 0
-
-    else
-        peces.lvl1.escala = 1
     end
 
 

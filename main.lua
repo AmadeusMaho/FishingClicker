@@ -17,7 +17,9 @@ ancho,alto = love.graphics.getDimensions()
 
 --musica
 music = {}
-music.level1 = love.audio.newSource("audio/m1.mp3","static")
+music.level1 = love.audio.newSource("audio/music1.mp3","static")
+music.level2 = love.audio.newSource("audio/music2.mp3","static")
+music.level3 = love.audio.newSource("audio/music3.mp3","static")
 
 -- sonidos
 sonidos = {}
@@ -77,7 +79,8 @@ function love.load()
     --quita lo borroso
     love.graphics.setDefaultFilter("nearest","nearest")
     love.audio.play(sonidos.bg)
-    sonidos.bg:setVolume(0.4)
+    sonidos.bg:setVolume(0.6)
+    music.level2:setVolume(0.5)
     sonidos.click:setVolume(0.7)
     sonidos.sell:setVolume(0.5)
     love.audio.play(music.level1)
@@ -155,7 +158,7 @@ function love.mousepressed()
     end
 
     if mouseX >= 10 and mouseX <= 10 + botones.cania:getWidth() and
-    mouseY >= 200 and mouseY <= 200 + botones.cania:getHeight() and monedaCant > mejoras.cania.proxMejora then
+    mouseY >= 200 and mouseY <= 200 + botones.cania:getHeight() and monedaCant >= mejoras.cania.proxMejora then
         --clickPeces.cant = clickPeces.cant - mejoras.cania.proxMejora
         love.audio.play(sonidos.upgrade1)
         clickPeces.cantPerClick = clickPeces.cantPerClick + 1

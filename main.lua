@@ -64,8 +64,8 @@ clickPeces = {}
 clickPeces.cant = 0
 clickPeces.numberTime = 0;clickPeces.numberSize = 0
 clickPeces.cantPerClick = 1
-clickPeces.posRandomX = math.random(50)
-clickPeces.posRandomY = math.random(70)
+clickPeces.posRandomX = math.random(100)
+clickPeces.posRandomY = math.random(100)
 
 -- monedas
 monedaSpritesheet = love.graphics.newImage("resources/moneda.png")
@@ -73,6 +73,7 @@ monedaGrid = anim8.newGrid(16,16,monedaSpritesheet:getWidth(),monedaSpritesheet:
 animaciones = {}
 animaciones.moneda = anim8.newAnimation(monedaGrid('1-7',1),0.2)
 monedaCant = 0;multMonedas=1
+
 
 
 function love.load()
@@ -92,6 +93,10 @@ end
 function love.update(dt)
     --animaciones.pezlvl1:update(dt)
     animaciones.moneda:update(dt)
+
+    if not music.level1:isPlaying() then
+        love.audio.play(music.level2)
+    end
 
     if clickPeces.numberTime > 0 then
         clickPeces.numberTime = clickPeces.numberTime - dt
@@ -163,7 +168,7 @@ function love.mousepressed()
         love.audio.play(sonidos.upgrade1)
         clickPeces.cantPerClick = clickPeces.cantPerClick + 1
         monedaCant = monedaCant - mejoras.cania.proxMejora
-        mejoras.cania.proxMejora = mejoras.cania.proxMejora + 20
+        mejoras.cania.proxMejora = math.floor((mejoras.cania.proxMejora + 20) * 1.2)
         mejoras.cania.nivelMejora = mejoras.cania.nivelMejora + 1       
     end
 

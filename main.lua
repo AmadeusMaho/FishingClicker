@@ -8,6 +8,7 @@
 --peces.lvl1Grid = anim8.newGrid(32,32,peces.lvl1Spritesheet:getWidth(),peces.lvl1Spritesheet:getHeight())
 --animaciones = {}
 --animaciones.pezlvl1 = anim8.newAnimation(peces.lvl1Grid('1-3',1),0.2)
+--animaciones.pezlvl1:draw(peces.lvl1Sprite,ancho/2-100,alto/2-100,nil,6,6)
 
 anim8 = require 'libraries.anim8'
 
@@ -22,6 +23,7 @@ music.level1 = love.audio.newSource("audio/m1.mp3","static")
 sonidos = {}
 sonidos.bg = love.audio.newSource("audio/bg-sound.mp3","static")
 sonidos.click = love.audio.newSource("audio/sfx.mp3","static")
+sonidos.sell = love.audio.newSource("audio/sellsound.mp3","static")
 
 --backgrounds
 bg = {}
@@ -49,10 +51,19 @@ mejoras = {}
 --botones
 botones = {}
 botones.cania = love.graphics.newImage("resources/botones/button_cana.png")
+botones.vender = love.graphics.newImage("resources/botones/vender.png")
 
 -- acumulador peces
 clickPeces = {}
 clickPeces.cant = 0
+
+-- monedas
+monedaSpritesheet = love.graphics.newImage("resources/moneda.png")
+monedaGrid = anim8.newGrid(16,16,monedaSpritesheet:getWidth(),monedaSpritesheet:getHeight())
+animaciones = {}
+animaciones.moneda = anim8.newAnimation(monedaGrid('1-7',1),0.2)
+monedaCant = 0
+
 
 function love.load()
     --quita lo borroso
@@ -68,9 +79,11 @@ end
 
 function love.update(dt)
     --animaciones.pezlvl1:update(dt)
+    animaciones.moneda:update(dt)
+
     if scaleTime > 0 then
         scaleTime = scaleTime - dt
-        peces.lvl1.escala = 1.2
+        peces.lvl1.escala = 1.15
     else
         peces.lvl1.escala = 1
     end
@@ -83,13 +96,16 @@ function love.draw()
     love.graphics.draw(bg.level1.sprite,0,0,0,nil)
     mouseX,mouseY = love.mouse.getPosition()
     love.graphics.draw(botones.cania,10,200)
-    font = love.graphics.newFont("resources/font.ttf",40)
+    animaciones.moneda:draw(monedaSpritesheet,1100,30,nil,1.5,1.5)
+    love.graphics.setNewFont(20)
+    love.graphics.print(monedaCant,1130,30 )
+    font = love.graphics.newFont("resources/font.ttf",50)
     love.graphics.setFont(font)
-    
-    love.graphics.print("Peces: "..clickPeces.cant,ancho/2-100,alto/2-100)
+    love.graphics.print("Peces: "..clickPeces.cant,ancho/2-120,alto/2-110) -- cantidad peces
     love.graphics.print(mouseX..mouseY)
-    --animaciones.pezlvl1:draw(peces.lvl1Sprite,ancho/2-100,alto/2-100,nil,6,6)
-    love.graphics.draw(peces.lvl1.sprite,ancho/2-180,alto/2-100,nil,peces.lvl1.escala ,peces.lvl1.escala)
+    love.graphics.draw(peces.lvl1.sprite,ancho/2-150,alto/2-100,nil,peces.lvl1.escala ,peces.lvl1.escala)
+    love.graphics.draw(botones.vender,1080,60,nil,0.7,0.7)
+
 end
 
 function love.mousepressed()
@@ -102,6 +118,17 @@ function love.mousepressed()
         peces.lvl1.escala = 1.2
     else
         peces.lvl1.escala = 1
- end
+    end
+
+     if mouseX >= 1080 and mouseX <= 1080 + botones.vender:getWidth() and
+    mouseY >= 60 and mouseY <= 60 + botones.vender:getHeight() then
+        love.audio.play(sonidos.sell) 
+        monedaCant = monedaCant + (clickPeces.cant * 2)
+        clickPeces.cant = 0
+
+    else
+        peces.lvl1.escala = 1
+    end
+
 
 end
